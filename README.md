@@ -1,4 +1,4 @@
-# Yosemite Alpine Lake Virome
+# Yosemite Lake Virome
 
 Analysis scripts and metadata associated with the study of viral communities in alpine lakes in Yosemite National Park, California.
 
