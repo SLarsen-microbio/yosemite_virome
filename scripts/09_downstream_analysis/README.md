@@ -26,11 +26,6 @@ This module documents downstream analyses performed using the corrected
      vOTU communities.
    - Adds geographic distance and HUC8 relationship for each lake pair.
 
-6. `06_distance_similarity_correlation.py`
-   - Tests the relationship between geographic distance and Jaccard
-     similarity using Spearman and Pearson correlations.
-   - Supports optional exclusion of individual lakes from the analysis.
-
 ## Input assumptions
 
 Community analyses use the 532-vOTU representative catalog generated
@@ -50,13 +45,13 @@ provided through metadata files rather than hard-coded in the scripts.
 
 ## Community Structure and Temporal Continuity
 
-7. `07_pcoa_votu_community.py`
+6. `06_pcoa_votu_community.py`
    - Calculates Bray-Curtis dissimilarity among samples from the
      breadth-filtered 532-vOTU RPKM matrix.
    - Performs principal coordinates analysis (PCoA) and reports sample
      coordinates, eigenvalues, and percent variance explained.
 
-8. `08_temporal_votu_continuity.py`
+7. `07_temporal_votu_continuity.py`
    - Compares vOTU detections between specified sample pairs.
    - Reports directional persistence and symmetric Jaccard similarity.
    - Supports an optional minimum-RPKM threshold for abundance-restricted
