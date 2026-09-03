@@ -11,7 +11,7 @@ This module documents downstream analyses performed using the corrected
    - A vOTU is considered present when its filtered RPKM is >0.
 
 2. `02_summarize_votu_occupancy.py`
-   - Classifies ambient vOTUs as lake-specific or shared.
+   - Classifies ambient vOTUs as not detected, lake-specific, or shared.
    - Summarizes the number of lakes occupied by each vOTU.
 
 3. `03_summarize_shared_votu_combinations.py`
@@ -47,3 +47,17 @@ provided through metadata files rather than hard-coded in the scripts.
 - Python 3
 - pandas
 - scipy
+
+## Community Structure and Temporal Continuity
+
+7. `07_pcoa_votu_community.py`
+   - Calculates Bray-Curtis dissimilarity among samples from the
+     breadth-filtered 532-vOTU RPKM matrix.
+   - Performs principal coordinates analysis (PCoA) and reports sample
+     coordinates, eigenvalues, and percent variance explained.
+
+8. `08_temporal_votu_continuity.py`
+   - Compares vOTU detections between specified sample pairs.
+   - Reports directional persistence and symmetric Jaccard similarity.
+   - Supports an optional minimum-RPKM threshold for abundance-restricted
+     sensitivity comparisons.
