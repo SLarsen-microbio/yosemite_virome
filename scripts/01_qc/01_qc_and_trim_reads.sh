@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Quality assessment and trimming of metagenomic sequencing reads.
+# Quality control and trimming of paired-end metagenomic reads.
 #
-# Historical workflow used for the Yosemite lake metagenomic datasets:
-#
+# Workflow:
 #   1. FastQC on raw reads
-#   2. fastp trimming with automatic paired-end adapter detection
+#   2. fastp trimming with paired-end adapter detection
 #   3. FastQC on trimmed reads
 #   4. MultiQC aggregation of QC reports
 #
@@ -15,15 +14,21 @@ set -euo pipefail
 #   fastp v1.0.1
 #   MultiQC v1.30
 #
-# fastp parameter retained from the original workflow:
-#   --detect_adapter_for_pe
+# Usage:
+#   bash 01_qc_and_trim_reads.sh /path/to/raw_fastq_files
 #
-# USER CONFIGURATION
-# Replace RAW_DIR with the location of the downloaded raw FASTQ files.
+# Expected input naming:
+#   SAMPLE_1.fastq.gz
+#   SAMPLE_2.fastq.gz
+
+if [[ $# -ne 1 ]]; then
+    echo "Usage: $0 /path/to/raw_fastq_files"
+    exit 1
+fi
+
+RAW_DIR="$1"
 
 THREADS=8
-
-RAW_DIR="/path/to/raw_fastq_files"
 
 TRIM_DIR="results/trimmed"
 QC_DIR="results/qc"
@@ -32,13 +37,8 @@ QC_TRIM_DIR="${QC_DIR}/trimmed_fastqc"
 
 mkdir -p \
     "${TRIM_DIR}" \
-    "${QC_DIR}" \
     "${QC_RAW_DIR}" \
     "${QC_TRIM_DIR}"
-
-# ---------------------------------------------------------------------
-# 1. FastQC on raw reads
-# ---------------------------------------------------------------------
 
 echo "[STEP] Running FastQC on raw reads"
 
@@ -48,10 +48,6 @@ find "${RAW_DIR}" \
     -print0 \
     | xargs -0 -n1 -P4 fastqc \
         -o "${QC_RAW_DIR}"
-
-# ---------------------------------------------------------------------
-# 2. Trim paired-end reads with fastp
-# ---------------------------------------------------------------------
 
 echo "[STEP] Trimming paired-end reads with fastp"
 
@@ -84,10 +80,6 @@ do
         -h "${QC_DIR}/${SAMPLE}.html"
 done
 
-# ---------------------------------------------------------------------
-# 3. FastQC on trimmed reads
-# ---------------------------------------------------------------------
-
 echo "[STEP] Running FastQC on trimmed reads"
 
 find "${TRIM_DIR}" \
@@ -96,10 +88,6 @@ find "${TRIM_DIR}" \
     -print0 \
     | xargs -0 -n1 -P4 fastqc \
         -o "${QC_TRIM_DIR}"
-
-# ---------------------------------------------------------------------
-# 4. Aggregate reports with MultiQC
-# ---------------------------------------------------------------------
 
 echo "[STEP] Running MultiQC"
 
